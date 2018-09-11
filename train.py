@@ -114,8 +114,8 @@ def main():
         torchvision.transforms.ToTensor()
     ])
 
-    train_loader = torch.utils.data.DataLoader(Fer2013Dataset(transforms=img_transforms), batch_size=128, shuffle=True)
-    test_loader = torch.utils.data.DataLoader(Fer2013ValidDataset(transforms=img_transforms), batch_size=128)
+    train_loader = torch.utils.data.DataLoader(Fer2013Dataset(transforms=img_transforms), batch_size=64, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(Fer2013ValidDataset(transforms=img_transforms), batch_size=64)
 
     model = resnet.resnet50()
     model.to(device)
