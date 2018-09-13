@@ -1,4 +1,5 @@
 import time
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -32,6 +33,7 @@ def train(train_loader, model, criterion, optimizer, epoch, device, num_epochs, 
         output = model(data)
         loss = criterion(output, target)
         acc = accuracy(output, target)
+        
         loss.backward()
         optimizer.step()
 
@@ -96,10 +98,9 @@ class AverageMeter(object):
 def main():
     seed = 11451466
     num_class = 7
-    em_iters = 3
-    lr = 0.0001
+    lr = 0.01
     momentum = 0.9
-    weight_decay = 0
+    weight_decay = 0.0001
     test_intvl = 1
     num_epochs = 100
     cuda = torch.cuda.is_available()
@@ -111,6 +112,7 @@ def main():
     device = torch.device("cuda" if cuda else "cpu")
 
     img_transforms = torchvision.transforms.Compose([
+        torchvision.transforms.ToPILImage(),
         torchvision.transforms.ToTensor()
     ])
 
@@ -120,7 +122,7 @@ def main():
     model = resnet.resnet50()
     model.to(device)
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
+    optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum, weight_decay=weight_decay)
     criterion = nn.CrossEntropyLoss()
     # scheduler = nn.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'max', patience=1)
 
